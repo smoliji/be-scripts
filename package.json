@@ -1,0 +1,23 @@
+{
+  "name": "ackee-scripts",
+  "version": "0.1.0",
+  "description": "Ackee build scripts",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .; exit 0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "ackee-scripts": "./bin/index.js"
+  },
+  "author": "Michal Vlasák <michal.vlasak@ackee.cz>",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-config-ackee": "^0.8.1"
+  },
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "eslint": "^4.19.1",
+    "shelljs": "^0.8.1"
+  }
+}
