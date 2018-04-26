@@ -17,13 +17,13 @@ switch (script) {
     case 'start':
         run('node server.js');
         break;
-    case 'start-hr':
+    case 'start-lr':
         run('nodemon --watch app --watch config --exec npm start');
         break;
     case 'test':
         run('nyc --reporter=text-summary --reporter=lcov ./node_modules/mocha/bin/_mocha --use_strict test/**');
         break;
-    case 'test-hr':
+    case 'test-lr':
         run('nodemon --watch test --watch app --exec npm run test');
         break;
     default:
