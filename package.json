@@ -4,7 +4,6 @@
   "description": "Ackee scripts for backend development",
   "main": "index.js",
   "scripts": {
-    "bin": "node ./dist/index.js",
     "prepublishOnly": "tsc"
   },
   "bin": {
