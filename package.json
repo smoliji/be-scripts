@@ -30,7 +30,6 @@
     "apib2swagger": "^1.8.0",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
-    "eslint": "^4.19.1",
     "html-inline": "^1.2.0",
     "mkdirp": "^0.5.1",
     "replace-ext": "^1.0.0",
