@@ -1,23 +1,40 @@
 {
-  "name": "ackee-scripts",
-  "version": "0.1.0",
-  "description": "Ackee build scripts",
+  "name": "@ackee/be-cli",
+  "version": "0.2.0",
+  "description": "Ackee scripts for backend development",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .; exit 0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "tsc"
   },
   "bin": {
-    "ackee-scripts": "./bin/index.js"
+    "ackee-be": "./bin/index.js",
+    "ackee-be-docs": "./bin/index-docs.js"
   },
   "author": "Michal Vlasák <michal.vlasak@ackee.cz>",
-  "license": "ISC",
+  "contributors": [
+    "Jiri Smolik <jiri.smolik@ackee.cz>"
+  ],
+  "engines": {
+    "node": ">=8.11.3"
+  },
+  "license": "MIT",
   "devDependencies": {
-    "eslint-config-ackee": "^0.8.1"
+    "@types/mkdirp": "^0.5.2",
+    "@types/shelljs": "^0.8.2",
+    "@types/tempy": "^0.2.0",
+    "tslint-config-ackee": "^0.2.5",
+    "typescript": "^3.3.1"
   },
   "dependencies": {
+    "aglio": "^2.3.0",
+    "apib2swagger": "^1.8.0",
     "chalk": "^2.4.1",
-    "eslint": "^4.19.1",
-    "shelljs": "^0.8.1"
+    "commander": "^2.19.0",
+    "html-inline": "^1.2.0",
+    "mkdirp": "^0.5.1",
+    "replace-ext": "^1.0.0",
+    "shelljs": "^0.8.3",
+    "swagger-gen": "git+https://git@github.com/vlasy/node-swagger-gen.git#aad0408",
+    "tempy": "^0.2.1"
   }
 }
