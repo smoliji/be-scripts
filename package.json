@@ -7,7 +7,8 @@
     "prepublishOnly": "tsc"
   },
   "bin": {
-    "ackee-be": "./bin/index.js"
+    "ackee-be": "./bin/index.js",
+    "ackee-be-docs": "./bin/index-docs.js"
   },
   "author": "Michal Vlasák <michal.vlasak@ackee.cz>",
   "contributors": [
