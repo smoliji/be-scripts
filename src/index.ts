@@ -3,8 +3,8 @@ import * as commander from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const pkgVersion = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
+const pkgVersion = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')).version;
 
-commander.version(pkgVersion.version)
+commander.version(pkgVersion)
     .command('docs', 'Generate API documentation')
     .parse(process.argv);
