@@ -50,6 +50,7 @@ export const swaggerize = async(options: Options & { mergeFile: string }) => {
         await promisify(fs.readFile)(options.mergeFile, 'utf8'),
         {
             preferReference: true,
+            bearerAsApikey: true,
         }
     );
     await promisify(fs.writeFile)(swaggerFile, JSON.stringify(result.swagger, null, 2), 'utf8');
