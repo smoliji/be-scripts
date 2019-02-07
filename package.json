@@ -4,7 +4,9 @@
   "description": "Ackee scripts for backend development",
   "main": "index.js",
   "scripts": {
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc",
+    "test": "jest",
+    "lint": "tslint -p . -t codeFrame"
   },
   "bin": {
     "ackee-be": "./bin/index.js",
@@ -22,6 +24,7 @@
     "@types/mkdirp": "^0.5.2",
     "@types/shelljs": "^0.8.2",
     "@types/tempy": "^0.2.0",
+    "jest": "^24.1.0",
     "tslint-config-ackee": "^0.2.5",
     "typescript": "^3.3.1"
   },
