@@ -4,8 +4,9 @@
   "description": "Ackee scripts for backend development",
   "main": "index.js",
   "scripts": {
-    "prepublishOnly": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "jest",
+    "build": "tsc",
     "lint": "tslint -p . -t codeFrame"
   },
   "bin": {
