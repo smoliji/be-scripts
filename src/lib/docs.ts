@@ -37,7 +37,9 @@ export const aglioCompilation = async(options: Options) => {
     const mergeFile = path.join(options.tempDir, `${path.basename(options.input[0])}-all.apib`);
     console.log(`Compiling with Algio. Out: ${mergeFile}`);
     await promisify(aglio.compileFile)(
-        path.join(process.cwd(), options.input[0]),
+        path.isAbsolute(options.input[0])
+            ? options.input[0]
+            : path.join(process.cwd(), options.input[0]),
         mergeFile
     );
     console.log('Aglio done');
@@ -81,7 +83,16 @@ export const mergeHtml = async(options: Options & { webFolder: string }) => {
     const webFolderIndex = path.join(options.webFolder, 'index.html');
     const inStream = fs.createReadStream(webFolderIndex);
     await promisify(mkdirp)(options.output);
-    const htmlFile = replaceExt(path.join(process.cwd(), options.output, path.basename(options.input[0])), '.html');
+    const htmlFile = replaceExt(
+        path.isAbsolute(options.input[0])
+            ? options.input[0]
+            : path.join(
+                  process.cwd(),
+                  options.output,
+                  path.basename(options.input[0])
+              ),
+        '.html'
+    );
     const outStream = fs.createWriteStream(htmlFile, 'utf8');
     const inline = inliner(
         {
