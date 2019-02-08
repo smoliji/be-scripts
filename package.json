@@ -3,6 +3,9 @@
   "version": "0.2.2-0",
   "description": "Ackee scripts for backend development",
   "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "prepublishOnly": "npm run build",
     "test": "jest",
