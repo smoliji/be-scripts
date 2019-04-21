@@ -11,7 +11,8 @@
   },
   "bin": {
     "ackee-be": "./bin/index.js",
-    "ackee-be-docs": "./bin/index-docs.js"
+    "ackee-be-docs": "./bin/index-docs.js",
+    "ackee-be-proxie": "./bin/index-proxie.js"
   },
   "author": "Michal Vlasák <michal.vlasak@ackee.cz>",
   "contributors": [

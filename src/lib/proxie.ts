@@ -19,7 +19,7 @@ inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
 
 const initializationCheck = async () => {
     console.log('Command check:');
-    await Promise.all(['gcloud', 'kubectl', 'cloud_sql_proxy']
+    const missing = (await Promise.all(['gcloud', 'kubectl', 'cloud_sql_proxy']
         .map(async cmd => {
             let status = '❌';
             try {
@@ -27,8 +27,14 @@ const initializationCheck = async () => {
                 status = '√';
             } catch (error) {}
             console.log(` ${cmd} ${status}`);
+            return { status, cmd };
         })
-    );
+    ))
+        .filter(({ status }) => status !== '√');
+    if (missing.length) {
+        console.log(`Missing following commands: ${missing.map(x => x.cmd)}. Will now exit.`);
+        process.exit(1);
+    }
     const auth = await gcloud.configListAccount();
     console.log(`Active gcloud account: ${auth && auth.core && auth.core.account}`);
 };
@@ -330,4 +336,4 @@ const main = async() => {
     }
 };
 
-main();
+export default main;
