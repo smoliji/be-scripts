@@ -34,3 +34,7 @@ Options:
 ```
 
 Currently supports only a single input - the first one, although multiple can be supplied to the CLI.
+
+### Proxie
+Lets you easily browse and connect to GCP CloudSQL/Virtual Machine/Pod.
+**Requires** you to have `kubectl`, `gcloud` and `cloud_sql_proxy` available.
