@@ -330,7 +330,7 @@ const main = async() => {
     if (answers.pod) {
         await kubectl.portForward(answers.pod.metadata.name, answers.remotePort, answers.localPort, { namespace: answers.pod.metadata.namespace });
     } else if (answers.cloudsql) {
-        await cloudSqlProxy.exec(answers.cloudsql, answers.localPort);
+        await cloudSqlProxy.connect(answers.cloudsql, answers.localPort);
     } else if (answers.vminstance) {
         await gcloud.computeSsh(answers.vminstance, answers.localPort, answers.remotePort, { project: answers.project });
     }
