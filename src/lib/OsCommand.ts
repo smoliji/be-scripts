@@ -1,9 +1,9 @@
 import * as cp from 'child_process';
+import * as spawn from 'cross-spawn';
 import loading from 'ora';
 import { promisify } from 'util';
 import { globalOptions } from './proxie';
 const kebab = require('kebab-case');
-
 const exec = promisify(cp.exec);
 
 export default class OsCommand<Flags extends { [key: string]: any }> {
@@ -52,7 +52,7 @@ export default class OsCommand<Flags extends { [key: string]: any }> {
             if (this.options.debug) {
                 console.log(`exec: ${cmdParts.join(' ')}`);
             }
-            const p = cp.spawn(cmdParts[0], cmdParts.slice(1));
+            const p = spawn(cmdParts[0], cmdParts.slice(1));
             p.on('error', reject);
             p.on('close', resolve);
             p.on('exit', resolve);
