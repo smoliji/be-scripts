@@ -6,6 +6,8 @@ import CloudSqlProxyCli from './CloudSqlProxyCli';
 import GcloudCli, { Cluster, Project, SqlInstance, VMInstance } from './GcloudCli';
 import KubectlCli, { Pod } from './KubectlCli';
 const commandExists = require('command-exists');
+import * as logSymbols from 'log-symbols';
+import loading from 'ora';
 
 export const globalOptions = {
     debug: !!/bescripts/.test(String(process.env.DEBUG)),
@@ -18,25 +20,48 @@ const cloudSqlProxy = new CloudSqlProxyCli(globalOptions);
 inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
 
 const initializationCheck = async () => {
-    console.log('Command check:');
-    const missing = (await Promise.all(['gcloud', 'kubectl', 'cloud_sql_proxy']
-        .map(async cmd => {
-            let status = '❌';
+    const load = loading('Inspecting environment').start();
+    const results = await Promise.all([
+        {
+            name: 'gcloud',
+            check: () => commandExists('gcloud'),
+        },
+        {
+            name: 'kubectl',
+            check: () => commandExists('kubectl'),
+        },
+        {
+            name: 'cloud_sql_proxy',
+            check: () => commandExists('cloud_sql_proxy'),
+        },
+        {
+            name: 'gcloud account',
+            check: async () => {
+                const auth = await gcloud.configListAccount();
+                return auth && auth.core && auth.core.account;
+            },
+        },
+    ]
+        .map(async item => {
             try {
-                await commandExists(cmd);
-                status = '√';
-            } catch (error) {}
-            console.log(` ${cmd} ${status}`);
-            return { status, cmd };
-        })
-    ))
-        .filter(({ status }) => status !== '√');
-    if (missing.length) {
-        console.log(`Missing following commands: ${missing.map(x => x.cmd)}. Will now exit.`);
-        process.exit(1);
+                const result = await item.check();
+                return [null, result, item];
+            } catch (error) {
+                return [error, item];
+            }
+        }),
+    );
+    load.succeed();
+    results.forEach(item => {
+        if (item[0]) {
+            console.log(` ${logSymbols.warning} ${item[1].name}`);
+        } else {
+            console.log(` ${logSymbols.success} ${item[2].name} (${item[1]})`);
+        }
+    });
+    if (results.some(item => item[0])) {
+        console.log(`${logSymbols.warning} Something is not right. App may not work properly.`);
     }
-    const auth = await gcloud.configListAccount();
-    console.log(`Active gcloud account: ${auth && auth.core && auth.core.account}`);
 };
 
 const searchable = <T>({ extract, getItems, display }: {

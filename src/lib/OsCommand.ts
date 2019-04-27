@@ -1,7 +1,7 @@
 import * as cp from 'child_process';
+import loading from 'ora';
 import { promisify } from 'util';
 import { globalOptions } from './proxie';
-const loading = require('loading-cli');
 const kebab = require('kebab-case');
 
 const exec = promisify(cp.exec);
@@ -31,9 +31,16 @@ export default class OsCommand<Flags extends { [key: string]: any }> {
             console.log(`exec: ${cmd}`);
         }
         const load = loading(cmd).start();
-        const result = await exec(cmd, { maxBuffer: 1024 * 1024 * 10 /* 10MB */ });
-        load.stop();
-        return options.outputRaw ? result.stdout : JSON.parse(result.stdout);
+        try {
+            const result = await exec(cmd, { maxBuffer: 1024 * 1024 * 10 /* 10MB */ });
+            load.stop();
+            return options.outputRaw ? result.stdout : JSON.parse(result.stdout);
+        } catch (error) {
+            load.fail(error.message);
+            throw error;
+        }
+        
+        
     }
     protected async spawn(args: string , flags: Flags & Record<string, any> = {} as Flags) {
         return new Promise((resolve, reject) => {
