@@ -39,6 +39,25 @@ const initializationCheck = async () => {
     console.log(`Active gcloud account: ${auth && auth.core && auth.core.account}`);
 };
 
+const searchable = <T>({ extract, getItems, display }: {
+    extract: (item: T) => string;
+    getItems: (answers: Answers) => Promise<T[]>;
+    display: (item: T) => { name: string, value: any, short: string};
+}) => {
+    return async (answers: Answers, input: string = '') => {
+        const fuzzyResult = fuzzy.filter(
+            input,
+            await getItems(answers),
+            { extract }
+        ) as Array<{ original: T }>;
+        if (!input && !fuzzyResult.length) {
+            console.log('No Results, sorry! Will now exit');
+            process.exit(0);
+        }
+        return fuzzyResult.map(item => display(item.original));
+    };
+}
+
 const vmPicker = () => {
     let list = Promise.resolve([]) as Promise<Array<VMInstance>>;
     const getList = async (answers: any) => {
@@ -53,43 +72,32 @@ const vmPicker = () => {
         type: 'autocomplete',
         name: 'vminstance',
         message: 'VM Instance (mongo...)',
-        source: async (answers: any, input: string = '') => {
-            const fuzzyResult = fuzzy.filter(
-                input,
-                await getList(answers),
-                { extract: (item: Project) => item.name }
-            ) as Array<{ original: VMInstance }>;
-            if (!input && !fuzzyResult.length) {
-                console.log('No VM Instances, sorry! Will now exit');
-                process.exit(0);
-            }
-            return fuzzyResult.map(item => ({
-                name: item.original.name,
-                value: item.original,
-                short: item.original.name,
-            }));
-        },
+        source: searchable({
+            getItems: getList,
+            extract: (item) => item.name,
+            display: item => ({
+                name: item.name,
+                value: item,
+                short: item.name,
+            }),
+        }),
     };
 };
 
 const gcProjectPicker = () => {
-    const list = gcloud.projectsList();
     return {
         type: 'autocomplete',
         name: 'project',
         message: 'GCP Project',
-        source: async (answers: Answers, input: string = '') => {
-            const fuzzyResult = fuzzy.filter(
-                input,
-                await list,
-                { extract: (item: Project) => item.name }
-            ) as Array<{ original: Project }>;
-            return fuzzyResult.map(item => ({
-                name: item.original.name,
-                value: item.original.projectId,
-                short: item.original.name,
-            }));
-        },
+        source: searchable({
+            extract: item => item.name,
+            getItems: ((list) => () => list)(gcloud.projectsList()),
+            display: item => ({
+                name: item.name,
+                value: item.projectId,
+                short: item.name,
+            }),
+        }),
     };
 };
 
@@ -112,18 +120,15 @@ const typePicker = () => {
         name: 'type',
         message: 'Pick forward type',
         type: 'autocomplete',
-        source: async (answers: Answers, input: string = '') => {
-            const fuzzyResult = fuzzy.filter(
-                input,
-                list,
-                { extract: (item: any) => item.name }
-            ) as Array<any>;
-            return fuzzyResult.map(item => ({
-                name: item.original.name,
-                value: item.original.value,
-                short: item.original.name,
-            }));
-        },
+        source: searchable({
+            getItems: async () => list,
+            extract: item => item.name,
+            display: item => ({
+                name: item.name,
+                value: item.value,
+                short: item.name,
+            }),
+        }),
     };
 };
 
@@ -192,25 +197,18 @@ const clusterPicker = () => {
         type: 'autocomplete',
         name: 'cluster',
         message: 'Pick a Cluster',
-        source: async (answers: any, input: string = '') => {
-            const fuzzyResult = fuzzy.filter(
-                input,
-                await getList(answers),
-                { extract: (item: Project) => item.name }
-            ) as Array<{ original: Cluster }>;
-            if (!input && !fuzzyResult.length) {
-                console.log('No Clusters, sorry! Will now exit');
-                process.exit(0);
-            }
-            return fuzzyResult.map(item => ({
+        source: searchable({
+            getItems: getList,
+            extract: item => item.name,
+            display: item => ({
                 name: [
-                    item.original.name,
-                    item.original.zone && `(${item.original.zone})`,
+                    item.name,
+                    item.zone && `(${item.zone})`,
                 ].filter(x => x).join(' '),
-                value: { name: item.original.name, zone: item.original.zone, location: item.original.location },
-                short: item.original.name,
-            }));
-        },
+                value: { name: item.name, zone: item.zone, location: item.location },
+                short: item.name,
+            }),
+        }),
     };
 };
 
@@ -228,22 +226,15 @@ const cloudSqlPicker = () => {
         type: 'autocomplete',
         name: 'cloudsql',
         message: 'Pick a CloudSQL instance',
-        source: async (answers: Answers, input: string = '') => {
-            const fuzzyResult = fuzzy.filter(
-                input,
-                await getList(answers),
-                { extract: (item: SqlInstance) => item.name }
-            ) as Array<{ original: SqlInstance }>;
-            if (!input && !fuzzyResult.length) {
-                console.log('No SqlInstances, sorry! Will now exit');
-                process.exit(0);
-            }
-            return fuzzyResult.map(item => ({
-                name: item.original.name,
-                value: item.original,
-                short: item.original.name,
-            }));
-        },
+        source: searchable({
+            getItems: getList,
+            extract: item => item.name,
+            display: item => ({
+                name: item.name,
+                value: item,
+                short: item.name,
+            }),
+        }),
     };
 };
 
@@ -274,25 +265,18 @@ const podPicker = () => {
         type: 'autocomplete',
         name: 'pod',
         message: 'Pick a Pod',
-        source: async (answers: any, input: string = '') => {
-            const fuzzyResult = fuzzy.filter(
-                input,
-                await getList(answers),
-                { extract: (item: Pod) => item.metadata.name }
-            ) as Array<{ original: Pod }>;
-            if (!input && !fuzzyResult.length) {
-                console.log('No Pods, sorry! Will now exit');
-                process.exit(0);
-            }
-            return fuzzyResult.map(item => ({
+        source: searchable({
+            getItems: getList,
+            extract: item => item.metadata.name,
+            display: item => ({
                 name: [
-                    item.original.metadata.name,
-                    item.original.metadata.namespace && `(${item.original.metadata.namespace})`,
+                    item.metadata.name,
+                    item.metadata.namespace && `(${item.metadata.namespace})`,
                 ].filter(x => x).join(' '),
-                value: item.original,
-                short: item.original.metadata.name,
-            }));
-        },
+                value: item,
+                short: item.metadata.name,
+            }),
+        }),
     };
 };
 
