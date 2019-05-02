@@ -1,10 +1,8 @@
 
 import { spawn } from 'child_process';
-import * as commander from 'commander';
 import * as fs from 'fs';
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
-import * as tempy from 'tempy';
 import { promisify } from 'util';
 const inliner = require('html-inline');
 const aglio = require('aglio');
@@ -17,15 +15,6 @@ aglio -i ./docs/api/api-technician.apib -c -o ./docs/api/api-technician.apib.all
 && swagger-gen --no-try-out -d ./docs/api/.temp-api-technician ./docs/api/api-technician.swagger.json
 && html-inline -i ./docs/api/.temp-api-technician/index.html -o ./docs-output/api-technician.html -b ./docs/api/.temp-api-technician
 */
-
-const collect = (val: any, memo: any[]) => memo.concat(val);
-const last = (val: any) => val;
-
-commander
-    .option('-i, --input [value]', 'Apib source files', collect, [])
-    .option('-o, --output [value]', 'Output folder', last, './docs-output')
-    .option('--tempDir [value]', 'Temp directory', last, tempy.directory())
-    .parse(process.argv);
 
 export interface Options {
     input: string[];
