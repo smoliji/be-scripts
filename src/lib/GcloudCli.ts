@@ -31,10 +31,10 @@ export interface Cluster {
     instanceGroupUrls: string[];
     ipAllocationPolicy: any;
     labelFingerprint: string;
-    legacyAbac: any,
+    legacyAbac: any;
     location: string;
     locations: string[];
-    loggingService: string,
+    loggingService: string;
     maintenancePolicy?: { window: any[] };
     masterAuth:
     {

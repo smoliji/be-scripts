@@ -39,8 +39,7 @@ export default class OsCommand<Flags extends { [key: string]: any }> {
             load.fail(error.message);
             throw error;
         }
-        
-        
+
     }
     protected async spawn(args: string , flags: Flags & Record<string, any> = {} as Flags) {
         return new Promise((resolve, reject) => {
