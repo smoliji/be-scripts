@@ -1,6 +1,6 @@
 {
   "name": "@ackee/be-cli",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Ackee scripts for backend development",
   "main": "index.js",
   "publishConfig": {
