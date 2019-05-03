@@ -14,7 +14,8 @@
   },
   "bin": {
     "ackee-be": "./bin/index.js",
-    "ackee-be-docs": "./bin/index-docs.js"
+    "ackee-be-docs": "./bin/index-docs.js",
+    "ackee-be-proxie": "./bin/index-proxie.js"
   },
   "author": "Michal Vlasák <michal.vlasak@ackee.cz>",
   "contributors": [
@@ -25,6 +26,8 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/cross-spawn": "^6.0.0",
+    "@types/get-port": "^4.2.0",
     "@types/jest": "^24.0.0",
     "@types/mkdirp": "^0.5.2",
     "@types/shelljs": "^0.8.2",
@@ -35,12 +38,23 @@
     "typescript": "^3.3.1"
   },
   "dependencies": {
+    "@google-cloud/compute": "^0.11.0",
+    "@types/inquirer": "0.0.44",
     "aglio": "^2.3.0",
     "apib2swagger": "^1.8.0",
     "chalk": "^2.4.1",
+    "command-exists": "^1.2.8",
     "commander": "^2.19.0",
+    "cross-spawn": "^6.0.5",
+    "fuzzy": "^0.1.3",
+    "get-port": "^4.2.0",
     "html-inline": "^1.2.0",
+    "inquirer": "^6.2.2",
+    "inquirer-autocomplete-prompt": "^1.0.1",
+    "kebab-case": "^1.0.0",
+    "log-symbols": "^3.0.0",
     "mkdirp": "^0.5.1",
+    "ora": "^3.4.0",
     "replace-ext": "^1.0.0",
     "shelljs": "^0.8.3",
     "swagger-gen": "git+https://git@github.com/vlasy/node-swagger-gen.git#aad0408",

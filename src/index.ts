@@ -7,4 +7,5 @@ const pkgVersion = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'packag
 
 commander.version(pkgVersion)
     .command('docs', 'Generate API documentation')
+    .command('proxie', 'Proxy to a GCP Service')
     .parse(process.argv);

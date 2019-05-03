@@ -18,6 +18,7 @@ Options:
 
 Commands:
   docs           Generate API documentation
+  proxie         Proxy to a GCP Service
   help [cmd]     display help for [cmd]
 ```
 
@@ -34,3 +35,9 @@ Options:
 ```
 
 Currently supports only a single input - the first one, although multiple can be supplied to the CLI.
+
+### Proxie
+An interactive command that lets you easily browse and connect to GCP CloudSQL/Virtual Machine/Pod.
+**Requires** you to have `kubectl`, `gcloud` and `cloud_sql_proxy` available.
+
+To debugging, set env variable `DEBUG` to contain `bescripts`.
